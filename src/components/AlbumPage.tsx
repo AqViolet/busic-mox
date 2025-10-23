@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { usePlayer, PlayerSong } from "@/context/PlayerContext";
 
 interface Song{
   id: number;
@@ -18,42 +18,16 @@ interface Album{
 }
 
 export default function AlbumPage({ album, songs }: { album: Album; songs: Song[] }) {
-  const [currentIndex, setCurrentIndex] = useState<number | null>(null);
-  const [volume, setVolume] = useState(0.6);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  const playSong = (index: number) => {
-    if (!songs[index]) return;
-    const audio = audioRef.current;
-    if (audio) {
-      audio.src = songs[index].file_path;
-      audio.volume = volume;
-      audio.play();
-      setCurrentIndex(index);
-    }
-  };
-
-  const handleEnded = () => {
-    if (currentIndex === null) return;
-    const nextIndex = currentIndex + 1;
-    if (nextIndex < songs.length) {
-      playSong(nextIndex);
-    } else {
-      setCurrentIndex(null); 
-    }
-  };
-
-  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newVolume = parseFloat(e.target.value);
-    setVolume(newVolume);
-    if (audioRef.current) audioRef.current.volume = newVolume;
-  };
-
-  useEffect(() => {
-    return () => {
-      if (audioRef.current) audioRef.current.pause();
-    };
-  }, []);
+  const { playSong, currentSong } = usePlayer();
+  const playlist: PlayerSong[] = songs.map((s) => ({
+    id: s.id,
+    title: s.title,
+    src: s.file_path,
+    albumId: album.id,
+    albumName: album.name,
+    artist: album.artist_name,
+    cover: album.cover_path,
+  }));
 
   return (
     <div className="min-h-screen bg-black text-gray-200 flex items-center justify-center">
@@ -78,43 +52,23 @@ export default function AlbumPage({ album, songs }: { album: Album; songs: Song[
           </div>
 
           <ul className="space-y-2 text-sm">
-            {songs.map((song, index) => (
+            {playlist.map((song, index) => (
               <li
                 key={song.id}
-                onClick={() => playSong(index)}
-                className={`cursor-pointer flex justify-between items-center px-4 py-2 rounded-lg transition ${
-                  currentIndex === index ? "bg-gray-800 text-white" : "hover:bg-gray-900"
+                onClick={() => playSong(song, playlist)}
+                className={`cursor-pointer flex justify-between items-center px-4 py-2 rounded-lg transition hover:bg-gray-900 ${
+                  currentSong?.id === song.id ? "bg-gray-800 text-white" : ""
                 }`}>
                 <div className="flex gap-4 items-center">
                   <span className="text-gray-500 w-6 text-right">{index + 1}.</span>
                   <span className="truncate max-w-[260px]">{song.title}</span>
                 </div>
                 <span className="text-gray-600 text-xs">
-                  {currentIndex === index ? "▶" : "3:17"}
+                  {currentSong?.id === song.id ? "▶" : "3:17"}
                 </span>
               </li>
             ))}
           </ul>
-
-          <div className="mt-10 flex flex-col items-center space-y-4">
-            <audio
-              ref={audioRef}
-              controls
-              className="w-full bg-transparent"
-              onEnded={handleEnded}/>
-            <div className="flex items-center space-x-3">
-              <span className="text-xs text-gray-500">🔉</span>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.01"
-                value={volume}
-                onChange={handleVolumeChange}
-                className="w-40 accent-green-500 cursor-pointer"/>
-              <span className="text-xs text-gray-500">🔊</span>
-            </div>
-          </div>
         </div>
       </div>
     </div>
