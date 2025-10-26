@@ -23,17 +23,6 @@ export default async function DashboardPage() {
   return (
     <main className="min-h-screen bg-black text-white flex flex-col">
       <div className="flex justify-between items-center px-6 py-3 text-sm text-gray-400">
-        <div className="space-x-4">
-          <span>(1) Queue</span>
-          <span>(2) Library</span>
-          <span>(3) Library Album Art</span>
-          <span>(4) Config Viewer</span>
-          <span>(5) Debug Logs</span>
-        </div>
-        <div className="text-center text-gray-300 text-sm">
-          Some Things Last a Long Time — Beach House · Devotion
-        </div>
-        <div className="text-gray-400">Vol: 100%</div>
       </div>
       <section className="flex-1 px-8 pb-12">
         {albums.length === 0 ? (

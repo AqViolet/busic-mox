@@ -29,7 +29,6 @@ export default function GlobalPlayer() {
     <>
       <header className="fixed top-0 left-0 right-0 z-50 bg-black text-gray-300 border-b border-gray-800">
         <div className="flex items-center justify-between px-6 py-2 text-sm">
-          {/* Left section: Navigation */}
           <div className="flex items-center space-x-4">
             <Link href="/" className="hover:text-white">Dashboard</Link>
             {currentSong?.albumId ? (
@@ -37,19 +36,14 @@ export default function GlobalPlayer() {
                 Current Album
               </Link>
             ) : (
-              <span className="text-gray-600">Current Album</span>
+              <span className="text-gray-300">Current Album</span>
             )}
             <Link href="/update" className="hover:text-white">Update</Link>
+            <Link href="/upload" className="hover:text-white">Upload</Link>
           </div>
-
-          {/* Center: Empty clean space */}
           <div className="flex-1" />
-
-          {/* Right section: Compact player */}
           <div className="flex items-center gap-4 justify-end min-w-[45%]">
-            {/* Song info + controls */}
             <div className="flex flex-col items-end w-full max-w-md">
-              {/* Controls row */}
               <div className="flex items-center gap-3">
                 <button
                   onClick={playPrev}
@@ -72,7 +66,6 @@ export default function GlobalPlayer() {
                   ▶▶
                 </button>
 
-                {/* Title + artist */}
                 <div className="truncate text-right ml-3">
                   <div className="text-white text-sm font-medium truncate">
                     {currentSong ? currentSong.title : "No song playing"}
@@ -83,7 +76,6 @@ export default function GlobalPlayer() {
                 </div>
               </div>
 
-              {/* Progress bar */}
               <div className="flex items-center gap-2 w-full mt-0.5">
                 <span className="text-xs text-gray-500">{fmt(progress)}</span>
                 <input
@@ -98,7 +90,6 @@ export default function GlobalPlayer() {
               </div>
             </div>
 
-            {/* Volume + Album Cover */}
             <div className="flex items-center gap-3">
               <input
                 type="range"
@@ -107,8 +98,7 @@ export default function GlobalPlayer() {
                 step={0.01}
                 value={volume}
                 onChange={(e) => setVolume(Number(e.target.value))}
-                className="w-20 accent-white h-[3px] cursor-pointer"
-              />
+                className="w-20 accent-white h-[3px] cursor-pointer"/>
               {currentSong?.cover && (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -121,8 +111,6 @@ export default function GlobalPlayer() {
           </div>
         </div>
       </header>
-
-      {/* Spacer below fixed navbar */}
       <div style={{ height: 56 }} />
     </>
   );
