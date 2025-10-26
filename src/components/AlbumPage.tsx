@@ -71,29 +71,6 @@ export default function AlbumPage({ album, songs }: { album: Album; songs: Song[
     if (e.target.files && e.target.files[0]) setNewFile(e.target.files[0]);
   };
 
-  const handleEditSubmit = async () => {
-    if (!selectedSong) return;
-    const formData = new FormData();
-    formData.append("title", newTitle);
-    formData.append("album_id", String(album.id));
-    if (newFile) formData.append("file", newFile);
-
-    const res = await fetch(`/api/songs/${selectedSong.id}`, {
-      method: "PUT",
-      body: formData,
-    });
-
-    if (res.ok) {
-      const updatedSong: Song = await res.json();
-      setSongList((prev: Song[]) =>
-        prev.map((s: Song) => (s.id === selectedSong.id ? updatedSong : s))
-      );
-      setShowEditModal(false);
-      setSelectedSong(null);
-      setNewFile(null);
-    } else alert("Failed to update song");
-  };
-
   return (
     <div className="min-h-screen bg-black text-gray-200 flex items-center justify-center">
       <div className="flex w-[90%] max-w-6xl items-start justify-center space-x-16 py-12">
@@ -150,17 +127,6 @@ export default function AlbumPage({ album, songs }: { album: Album; songs: Song[
                       className="absolute right-0 top-6 bg-gray-900 border border-gray-700 rounded-md shadow-lg w-32 z-50"
                       onClick={(e) => e.stopPropagation()}>
                       <button
-                        onClick={() =>
-                          handleEdit({
-                            id: song.id,
-                            title: song.title,
-                            file_path: song.src,
-                          })
-                        }
-                        className="block w-full text-left px-4 py-2 hover:bg-gray-800 text-gray-200 text-sm">
-                        Edit
-                      </button>
-                      <button
                         onClick={() => handleDelete(song.id)}
                         className="block w-full text-left px-4 py-2 hover:bg-red-700 text-red-400 text-sm">
                         Delete
@@ -196,9 +162,6 @@ export default function AlbumPage({ album, songs }: { album: Album; songs: Song[
             <div className="flex justify-end space-x-2">
               <button onClick={() => setShowEditModal(false)} className="bg-gray-600 px-4 py-2 rounded">
                 Cancel
-              </button>
-              <button onClick={handleEditSubmit} className="bg-blue-600 px-4 py-2 rounded">
-                Save
               </button>
             </div>
           </div>
