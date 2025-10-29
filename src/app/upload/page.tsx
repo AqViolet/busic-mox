@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { uploadNewAlbum, uploadExistingAlbum, getAlbums } from '@/app/upload/actions';
 import { useRouter } from 'next/navigation';
+import AuthGuard from '@/components/AuthGuard';
 
 export default function UploadPage() {
   const router = useRouter();
@@ -72,10 +73,10 @@ export default function UploadPage() {
   };
 
   return (
+    <AuthGuard>
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center px-6">
       <h1 className="text-3xl font-bold mb-6">Upload Music</h1>
 
-      {/* Toggle */}
       <div className="flex items-center gap-3 mb-6">
         <span className={isNewAlbum ? 'text-green-400' : 'text-gray-400'}>
           New Album
@@ -85,8 +86,7 @@ export default function UploadPage() {
             type="checkbox"
             className="sr-only peer"
             checked={!isNewAlbum}
-            onChange={() => setIsNewAlbum(!isNewAlbum)}
-          />
+            onChange={() => setIsNewAlbum(!isNewAlbum)}/>
           <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
         </label>
         <span className={!isNewAlbum ? 'text-green-400' : 'text-gray-400'}>
@@ -96,8 +96,7 @@ export default function UploadPage() {
 
       <form
         onSubmit={handleSubmit}
-        className="bg-gray-900 p-6 rounded-2xl shadow-md w-full max-w-lg space-y-4"
-      >
+        className="bg-gray-900 p-6 rounded-2xl shadow-md w-full max-w-lg space-y-4">
         {isNewAlbum ? (
           <>
             <label className="block">
@@ -107,8 +106,7 @@ export default function UploadPage() {
                 className="w-full bg-gray-800 p-2 rounded-md mt-1"
                 value={albumName}
                 onChange={(e) => setAlbumName(e.target.value)}
-                required
-              />
+                required/>
             </label>
 
             <label className="block">
@@ -118,8 +116,7 @@ export default function UploadPage() {
                 className="w-full bg-gray-800 p-2 rounded-md mt-1"
                 value={artistName}
                 onChange={(e) => setArtistName(e.target.value)}
-                required
-              />
+                required/>
             </label>
 
             <label className="block">
@@ -139,8 +136,7 @@ export default function UploadPage() {
             <select
               className="w-full bg-gray-800 p-2 rounded-md mt-1"
               value={selectedAlbum}
-              onChange={(e) => setSelectedAlbum(e.target.value)}
-            >
+              onChange={(e) => setSelectedAlbum(e.target.value)}>
               <option value="">Select an Album</option>
               {albums.map((album) => (
                 <option key={album.id} value={album.id}>
@@ -158,15 +154,13 @@ export default function UploadPage() {
             accept="audio/*"
             onChange={(e) => setSong(e.target.files?.[0] || null)}
             className="w-full bg-gray-800 p-2 rounded-md mt-1"
-            required
-          />
+            required/>
         </label>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-green-600 hover:bg-green-700 p-2 rounded-md text-white font-semibold mt-4"
-        >
+          className="w-full bg-green-600 hover:bg-green-700 p-2 rounded-md text-white font-semibold mt-4">
           {loading ? 'Uploading...' : 'Upload'}
         </button>
 
@@ -174,5 +168,6 @@ export default function UploadPage() {
         {success && <p className="text-green-400 text-sm mt-2">Upload successful!</p>}
       </form>
     </div>
+    </AuthGuard>
   );
 }

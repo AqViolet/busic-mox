@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { getAlbumsWithSongs, updateAlbum, updateSong, deleteSong } from './actions';
+import AuthGuard from '@/components/AuthGuard';
 
 export default function UpdatePage() {
   const [albums, setAlbums] = useState<any[]>([]);
@@ -45,6 +46,7 @@ export default function UpdatePage() {
   };
 
   return (
+    <AuthGuard>
     <div className="min-h-screen bg-black text-white p-8 space-y-8">
       <h1 className="text-3xl font-bold mb-4">Update Music Library</h1>
       {msg && <p className="text-green-400 mb-4">{msg}</p>}
@@ -126,5 +128,6 @@ export default function UpdatePage() {
         </div>
       ))}
     </div>
+    </AuthGuard>
   );
 }

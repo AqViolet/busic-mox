@@ -24,9 +24,7 @@ export default function AlbumPage({ album, songs }: { album: Album; songs: Song[
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
   const [songList, setSongList] = useState<Song[]>(songs);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
-  const [selectedSong, setSelectedSong] = useState<Song | null>(null);
   const [newTitle, setNewTitle] = useState<string>("");
-  const [newFile, setNewFile] = useState<File | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const playlist: PlayerSong[] = songList.map((s: Song) => ({
     id: s.id,
@@ -60,20 +58,9 @@ export default function AlbumPage({ album, songs }: { album: Album; songs: Song[
     setOpenMenuId(null);
   };
 
-  const handleEdit = (song: Song) => {
-    setSelectedSong(song);
-    setNewTitle(song.title);
-    setShowEditModal(true);
-    setOpenMenuId(null);
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) setNewFile(e.target.files[0]);
-  };
-
   return (
     <div className="min-h-screen bg-black text-gray-200 flex items-center justify-center">
-      <div className="flex w-[90%] max-w-6xl items-start justify-center space-x-16 py-12">
+      <div className="flex w-[90%] max-w-6xl items-start justify-center space-x-16 py-12 mt-16">
         <div className="flex flex-col items-center w-[35%]">
           <img
             src={album.cover_path}
@@ -157,7 +144,6 @@ export default function AlbumPage({ album, songs }: { album: Album; songs: Song[
             <input
               type="file"
               accept="audio/*"
-              onChange={handleFileChange}
               className="w-full p-2 bg-gray-800 rounded text-white mb-4"/>
             <div className="flex justify-end space-x-2">
               <button onClick={() => setShowEditModal(false)} className="bg-gray-600 px-4 py-2 rounded">

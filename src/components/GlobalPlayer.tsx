@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { usePlayer } from "@/context/PlayerContext";
 
 export default function GlobalPlayer() {
@@ -24,22 +25,47 @@ export default function GlobalPlayer() {
     const s = Math.floor(t % 60).toString().padStart(2, "0");
     return `${m}:${s}`;
   };
+  const pathname = usePathname();
+  const router = useRouter();
+  const [showLogout, setShowLogout] = useState(false);
+
+  useEffect(() => {
+    setShowLogout(!["/login", "/register"].includes(pathname));
+  }, [pathname]);
+
+  const handleLogout = () => {
+    localStorage.clear();
+    router.push("/login");
+  };
 
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 bg-black text-gray-300 border-b border-gray-800">
         <div className="flex items-center justify-between px-6 py-2 text-sm">
           <div className="flex items-center space-x-4">
-            <Link href="/" className="hover:text-white">Dashboard</Link>
+            <Link href="/dashboard" className="hover:text-white transition">
+              Dashboard
+            </Link>
             {currentSong?.albumId ? (
-              <Link href={`/album/${currentSong.albumId}`} className="hover:text-white">
+              <Link href={`/album/${currentSong.albumId}`} className="hover:text-white transition">
                 Current Album
               </Link>
             ) : (
-              <span className="text-gray-300">Current Album</span>
+              <span className="hover:text-white">Current Album</span>
             )}
-            <Link href="/update" className="hover:text-white">Update</Link>
-            <Link href="/upload" className="hover:text-white">Upload</Link>
+            <Link href="/update" className="hover:text-white transition">
+              Update
+            </Link>
+            <Link href="/upload" className="hover:text-white transition">
+              Upload
+            </Link>
+            {showLogout && (
+              <button
+                onClick={handleLogout}
+                className="hover:text-white transition text-gray-300">
+                Logout
+              </button>
+            )}
           </div>
           <div className="flex-1" />
           <div className="flex items-center gap-4 justify-end min-w-[45%]">
@@ -75,7 +101,6 @@ export default function GlobalPlayer() {
                   </div>
                 </div>
               </div>
-
               <div className="flex items-center gap-2 w-full mt-0.5">
                 <span className="text-xs text-gray-500">{fmt(progress)}</span>
                 <input
