@@ -20,7 +20,7 @@ export default function LoginPage() {
       const result = await loginUser(formData);
       if (result.success) {
         localStorage.setItem('user', result.username);
-        router.push('/');
+        router.push('/dashboard');
       }
     } catch (err: any) {
       setError(err.message);
