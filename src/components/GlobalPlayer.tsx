@@ -44,26 +44,26 @@ export default function GlobalPlayer() {
         <div className="flex items-center justify-between px-6 py-2 text-sm">
           <div className="flex items-center space-x-4">
             <Link href="/dashboard" className="hover:text-white transition">
-              Dashboard
+              (1) Dashboard
             </Link>
             {currentSong?.albumId ? (
               <Link href={`/album/${currentSong.albumId}`} className="hover:text-white transition">
-                Current Album
+                (2) Current Album
               </Link>
             ) : (
               <span className="hover:text-white">Current Album</span>
             )}
             <Link href="/update" className="hover:text-white transition">
-              Update
+              (3) Update
             </Link>
             <Link href="/upload" className="hover:text-white transition">
-              Upload
+              (4) Upload
             </Link>
             {showLogout && (
               <button
                 onClick={handleLogout}
                 className="hover:text-white transition text-gray-300">
-                Logout
+                (5) Logout
               </button>
             )}
           </div>
